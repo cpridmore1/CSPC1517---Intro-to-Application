@@ -30,7 +30,6 @@ namespace OOPSReview
         public Turn()
         {
 
-
         }
 
         public Turn(int player1, int player2)

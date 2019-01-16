@@ -98,7 +98,7 @@ namespace OOPSReview
         //the only way to access the data of an auto-implemented property is via the proerty.
         //ushally use when there is no need for any internal validation or other proerty logic.
 
-        public int FaceValue { get; set; }
+        public int FaceValue { get; private set; }
 
 
         //===Constructors===
