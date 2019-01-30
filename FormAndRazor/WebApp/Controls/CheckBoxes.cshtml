@@ -1,6 +1,9 @@
 ﻿@{
     Layout = "~/_Layout.cshtml";
     Page.Title = "Checkboxes";
+
+    var choices = "";
+    var theButton = Request.Form["formbutton"];
 }
 
 @section head{
@@ -11,26 +14,69 @@
     <h1>CheckBoxes</h1>
 }
 
-    <form id="theform" method="post">
+@if (IsPost)
+{
+    // determine which button was pressed
 
-        <div class="row">
-            <div class="col-md-offset-2">
-                <label id="gamegroup">Select your favourite gaming platform</label><br />
+    if (theButton.Equals("clear"))
+    {
+        choices = "";
+    }
+    else
+    {
 
-                <input type="checkbox" id="gamegroup" name="gamegroup" value="PS4" />Playstation 4<br />
-                <input type="checkbox" id="gamegroup" name="gamegroup" value="PC" />PC<br />
-                <input type="checkbox" id="gamegroup" name="gamegroup" value="Xbox One" />Xbox One<br />
-                <input type="checkbox" id="gamegroup" name="gamegroup" value="Switch" />Nintendo Switch<br />
-                <input type="checkbox" id="gamegroup" name="gamegroup" value="Cell" />Cellphone<br />
-                <input type="checkbox" id="gamegroup" name="gamegroup" value="Ipad" />Ipad<br />
+        //postpone the collection of the form data until there is actually a post back
+        choices = Request.Form["gamegroup"];
 
-            </div>
+        if (string.IsNullOrEmpty(choices))
+        {
+            choices = "";
+            <p><span sytle="color:firebrick"><strong>You did not select a gaming platfrom</strong></span></p>
+        }
+        else
+        {
+            //The result of the input data is a set of comma seperated values in a string. We will use the string method . split(delimiter) to break apart this set of values into an array of strings.
+            //delimiter for csv is a character comma (',')
+
+            <p>
+                I see you like to use the following platforms:
+                <ul>
+                    @foreach (var platfrom in choices.Split(','))
+                    {
+                        <li>@platfrom</li>
+                    }
+                </ul>
+            </p>
+        }
+    }
+
+}
+
+
+
+<form id="theform" method="post">
+
+    <div class="row">
+        <div class="col-md-offset-2">
+            <label id="gamegroup">Select your favourite gaming platform</label><br />
+
+            <!--Array is a class, IndexOf is a method. Choice.Split is an array of strings. PS4 is the string we are looking for. Will return the checked if found. Checked turns on checkbox.-->
+
+            <input type="checkbox" id="gamegroup" name="gamegroup" value="PS4" @(Array.IndexOf(choices.Split(','), "PS4") >= 0 ? "checked" : "") />Playstation 4<br />
+            <input type="checkbox" id="gamegroup" name="gamegroup" value="PC" @(Array.IndexOf(choices.Split(','), "PC") >= 0 ? "checked" : "") />PC<br />
+            <input type="checkbox" id="gamegroup" name="gamegroup" value="Xbox One" @(Array.IndexOf(choices.Split(','), "Xbox One") >= 0 ? "checked" : "") />Xbox One<br />
+            <input type="checkbox" id="gamegroup" name="gamegroup" value="Switch" @(Array.IndexOf(choices.Split(','), "Switch") >= 0 ? "checked" : "") />Nintendo Switch<br />
+            <input type="checkbox" id="gamegroup" name="gamegroup" value="Cell" @(Array.IndexOf(choices.Split(','), "Cell") >= 0 ? "checked" : "") />Cellphone<br />
+            <input type="checkbox" id="gamegroup" name="gamegroup" value="Ipad" @(Array.IndexOf(choices.Split(','), "Ipad") >= 0 ? "checked" : "") />Ipad<br />
+
         </div>
+    </div>
 
-        <div class="row">
-            <div class="col-md-offset-3">
-                <button type="submit" class="btn btn-primary" id="formbutton" name="formbutton" value="submit">Submit</button>
-            </div>
+    <div class="row">
+        <div class="col-md-offset-3">
+            <button type="submit" class="btn btn-primary" id="formbutton" name="formbutton" value="submit">Submit</button>&nbsp;&nbsp;
+            <button type="submit" class="btn" id="formbutton" name="formbutton" value="clear">Clear</button>
         </div>
+    </div>
 
-    </form>
+</form>
