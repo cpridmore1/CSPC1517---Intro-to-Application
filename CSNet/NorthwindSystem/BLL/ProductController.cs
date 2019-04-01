@@ -133,6 +133,37 @@ namespace NorthwindSystem.BLL
             }
         }
 
+        #region Insert, Update, Deletes of CRUD
+        //Returning the new identity primary key value is optional
+        public int Product_Add(Product item)
+        {
+            //the web page will create an instance of the product entity and load the incoming web page data into the instance.
+            using (var context = new NorthwindContext())
+            {
+                //step 1) staging
+                //assign the incoming product instance to its appropriate DbSet<T>
+                //The instance will not be placed on the database at this point in time. Therefore the primary key value will not be avalible. 
+
+                context.Products.Add(item);
+
+                //step 2) Commit
+                //during this step the data instance will be placed on the database.
+                //if the committing command on this method is not executed
+                //the staged instance will be rolled back
+                //this code is being executed within a transaction.
+                //successful execution of the commiting command will be a comit to the transaction.
+                //if the transaction command is commited, the new primary key will be in your instance
+                //during this command execution, any entity validation annotation is executed.
+
+                context.SaveChanges();
+
+                //optionally this method is returing the new primary key value
+                return item.ProductID;
+
+            }
+
+        }
+        #endregion
 
     }
 }
